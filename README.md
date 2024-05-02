@@ -1,3 +1,7 @@
+# 소마 React 스터디 - TodoList
+
+TodoList를 만들어봤어요~~
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
