@@ -5,7 +5,7 @@ export default function TodoElement(
     entity : TodoEntity, 
     delentityfunc : (id : number) => void,
     changeentityfunc : (entity : TodoEntity) => void
-    ){
+) {
     
     return (
         <div 

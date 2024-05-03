@@ -2,10 +2,14 @@ import { useState } from "react"
 
 
 // TodoList Input 부분
-export default function TodoInput({addfunc} : {addfunc: (title: string) => void}) {
+export default function TodoInput(
+    {addfunc} 
+    : 
+    {addfunc: (title: string) => void}
+) {
     const [value, setValue] = useState("")
     
-    function onClick(e: any) {
+    const onClick = (e: any) => {
         e.preventDefault()
         
         if (value == '') {
@@ -19,8 +23,8 @@ export default function TodoInput({addfunc} : {addfunc: (title: string) => void}
     
     return (
         <form className="todoInput" onSubmit={onClick}>
-            <input 
-                type="text" 
+            <input
+                type="text"
                 className="todoInputText" 
                 name="value"
                 value={value} 
