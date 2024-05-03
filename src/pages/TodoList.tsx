@@ -1,40 +1,39 @@
-import { useReducer } from "react"
-import { TodoEntity, TodolistReducer } from "./Utility"
+import { useReducer, useState } from "react"
+import { TodoEntity } from "./Utility"
 import TodoInput from "./TodoInput"
 import TodoElement from "./TodoElement"
 
 
 export default function TodoList() {
-    const [todolist, dispatch] = useReducer(TodolistReducer, [])
+    const [todolist, setTodoList] = useState<TodoEntity[]>([])
 
     function handleAddTodolist(title: string) {
-        dispatch({
-            type: 'added',
-            entity: {
+        setTodoList([
+            ...todolist,
+            {
                 id: (new Date()).getTime(),
                 title: title,
                 isDone: false
             }
-        })
+        ])
     }
 
     function handleDeleteTodolist(id : number) {
-        dispatch({
-            type: 'deleted',
-            entity: {
-                id: id,
-                title: '',
-                isDone: false
-            }
-        })
+        setTodoList(
+            todolist.filter(en => en.id != id)
+        )
     }
 
     // id에 따른 title과 isDone을 entity에 맞추어서 바꾸어주는 함수
     function handleChangeTodolist(entity: TodoEntity) {
-        dispatch({
-            type: 'changed',
-            entity: entity
-        })
+        setTodoList(todolist.map(
+            (en) => {
+                if (en.id == entity.id){
+                    return entity
+                }
+                return en
+            }
+        ))
     }
 
 

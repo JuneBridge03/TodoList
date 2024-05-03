@@ -12,6 +12,7 @@ export default function TodoInput({addfunc} : {addfunc: (title: string) => void}
             alert("내용을 입력해주세요")
             return
         }
+
         addfunc(value)
         setValue("")
     }
@@ -21,7 +22,7 @@ export default function TodoInput({addfunc} : {addfunc: (title: string) => void}
             <input 
                 type="text" 
                 className="todoInputText" 
-                name="value" 
+                name="value"
                 value={value} 
                 onChange={(e) => {setValue(e.target.value)}} 
                 />
