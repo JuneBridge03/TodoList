@@ -1,11 +1,13 @@
+import React from "react"
 
 
-export default function Title() {
-
-
+const Title = React.memo(() => {
+    
     return (
-        <div className="title">
+        <div className="flex justify-between mb-3">
             <h1>할 일 목록</h1>
         </div>
     )
-}
+})
+
+export default Title

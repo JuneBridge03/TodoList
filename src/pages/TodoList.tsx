@@ -1,49 +1,82 @@
-import { useReducer } from "react"
-import { TodoEntity, TodolistReducer } from "./Utility"
-import TodoInput from "./TodoInput"
+import { Action, TodoEntity } from "./Utility"
 import TodoElement from "./TodoElement"
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
+import React from "react"
+// import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 
 
-export default function TodoList() {
-    const [todolist, dispatch] = useReducer(TodolistReducer, [])
-
-    function handleAddTodolist(title: string) {
-        dispatch({
-            type: 'added',
-            entity: {
-                id: (new Date()).getTime(),
-                title: title,
-                isDone: false
-            }
-        })
+const TodoList = React.memo((
+    {todolist, dispatch}
+    : 
+    {
+        todolist: TodoEntity[],
+        dispatch: React.Dispatch<Action>
     }
-
-    function handleDeleteTodolist(id : number) {
+) => {
+    
+    const handleDeleteTodolist = (id: number) => {
         dispatch({
-            type: 'deleted',
+            type: "delete",
             entity: {
                 id: id,
-                title: '',
+                title: "",
                 isDone: false
             }
         })
     }
 
-    // id에 따른 title과 isDone을 entity에 맞추어서 바꾸어주는 함수
-    function handleChangeTodolist(entity: TodoEntity) {
+    const handleChangeTodolist = (entity: TodoEntity) => {
         dispatch({
-            type: 'changed',
+            type: "change",
             entity: entity
         })
     }
 
 
+    const handleEnd = (result: any) => {
+        if(! result.destination) return;
+
+        const newTodolist = todolist;
+
+        const [reorderedItem] = newTodolist.splice(result.source.index, 1);
+
+        newTodolist.splice(result.destination.index, 0, reorderedItem)
+        
+        // 셑 함수 없는데 어떻게 해??
+        // 근데 이거 왜 됨...? ㄷㄷ
+    }
+
+    
     return (
         <div>
-            <div className="todoList">
-                {todolist.map(e => TodoElement(e, handleDeleteTodolist, handleChangeTodolist))}
-            </div>
-            <TodoInput addfunc={handleAddTodolist} />
+        <DragDropContext onDragEnd={handleEnd}>
+        <Droppable droppableId="todoids">
+            {(provided) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                {todolist.map((e, index) => 
+                    <Draggable
+                        key={e.id}
+                        draggableId={e.id.toString()}
+                        index={index}
+                    >
+                        {(provided, snapshot) => (
+                            <div key={e.id} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
+                            <TodoElement
+                                entity={e}
+                                delentityfunc={handleDeleteTodolist}
+                                changeentityfunc={handleChangeTodolist}
+                            />
+                            </div>
+                        )}
+                    </Draggable>
+                )}
+                {provided.placeholder}
+                </div>
+            )}
+        </Droppable>
+        </DragDropContext>
         </div>
     )
-}
+})
+
+export default TodoList;
