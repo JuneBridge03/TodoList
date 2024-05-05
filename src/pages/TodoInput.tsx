@@ -1,12 +1,13 @@
 import React from "react"
 import { useState } from "react"
+import { Action } from "./Utility"
 
 
 // TodoList Input 부분
 const TodoInput = React.memo((
-    {addfunc} 
-    : 
-    {addfunc: (title: string) => void}
+    {dispatch} 
+    :
+    {dispatch: React.Dispatch<Action>}
 ) => {
     const [value, setValue] = useState("")
     
@@ -18,7 +19,14 @@ const TodoInput = React.memo((
             return
         }
 
-        addfunc(value)
+        dispatch({
+            type: "add",
+            entity: {
+                id: (new Date()).getTime(),
+                title: value,
+                isDone: false
+            }
+        })
         setValue("")
     }
 

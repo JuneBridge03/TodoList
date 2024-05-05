@@ -32,7 +32,6 @@ export const TodolistReducer = (todolist : TodoEntity[], action : Action): TodoE
 
             return todolist.map(en => {
                 if (en.id == action.entity.id) return action.entity
-
                 return en
             })
             
